@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slang Translator</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            position: relative;
+            background-color: #ad74f2; /* Minty Blue Background Color */
+            color: #000000; /* Black Text Color */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #5804bf;
+            font-size: 48px; /* Larger font size */
+            margin-top: 50px; /* Adjusted top margin */
+            margin-bottom: 20px; /* Adjusted bottom margin */
+            z-index: 1; /* Ensure title is above the hearts */
+            position: relative; /* Ensure proper stacking context */
+        }
+
+        h1::before {
+            content: ' #@!#@!#@!#@!#@!#@!#@! '; /* Heart added before the title */
+            font-size: 30px;
+            color: #5804bf; /* Same color as the title */
+            margin-right: 10px; /* Adjusted margin for spacing */
+            position: absolute;
+            top: 50%;
+            left: 5%; /* Adjusted left position */
+            transform: translateY(-50%);
+        }
+
+        h1::after {
+            content: ' #@!#@!#@!#@!#@!#@!#@!'; /* Heart added after the title */
+            font-size: 30px;
+            color: 5804bf; /* Same color as the title */
+            margin-left: 10px; /* Adjusted margin for spacing */
+            position: absolute;
+            top: 50%;
+            right: 5%; /* Adjusted right position */
+            transform: translateY(-50%);
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 70vh; /* Adjusted height of the container */
+            z-index: 1; /* Ensure container is above the hearts */
+            position: relative; /* Ensure proper stacking context */
+        }
+
+        .textbox {
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            height: 40px;
+            font-size: 16px;
+            background-color: #ffffffff; /* Minty Blue Background Color */
+            border: 1px solid #5804bf;
+            color: #000000; /* Black Text Color */
+            font-family: 'Times New Roman', Times, serif; /* Times New Roman Font */
+        }
+
+        .switch-button {
+            background-color:#5804bf;
+            color: #ffffff;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Slang Translator</h1>
+    <div class="container">
+        <input type="text" id="leftTextbox" class="textbox" placeholder="Enter text..." onkeydown="handleEnter(event)">
+        <button class="switch-button" onclick="translateText()">↔️</button>
+        <input type="text" id="rightTextbox" class="textbox" placeholder="Translated text..." onkeydown="handleEnter(event)">
+    </div>
+
+    <script>
+        // Mapping object for translations
+        const translations = {
+            'ong': 'on god',
+            'omg': 'oh my god',
+            'lol': 'laugh out loud',
+            'lmao': 'laughing my butt off',
+            'lmfao': 'laughing my flipping but off',
+            'ash' : 'as hell',
+            'asf' : 'as flip',
+            'tbh' : 'to be honest',
+            'ngl' : 'not gonna lie',
+            'af' : 'as flip',
+            'wsp' : 'whats up',
+            'tn' : 'tonight',
+            'alr' : 'alright',
+            'k' : 'ok',
+            'u' : 'you',
+            'tt' : 'tik tok',
+            'ig' : 'instagram and/or I guess',
+            'gn' : 'goodnight',
+            'lmk' : 'let me know',
+            'ttyl' : 'talk to you later',
+            'gm' : 'good morning',
+            'tysm' :'thank you so much',
+            'ty' : 'thank you',
+            'thx' : 'thanks',
+            'rn' : 'right now',
+            'wtf' : 'what the flip',
+            'tf' : 'the flip',
+            'sry' : 'sorry',
+            'gna' : 'gonna',
+            'prolly' : 'probably',
+            'ab' : 'about',
+            'btw' : 'by the way',
+            'smt' : 'something',
+            'gg' :  'good game',
+            'gl' : 'good luck',
+            'rly' : 'really',
+            'imma' : 'I am going to',
+            'banger' : 'something cool',
+            'rq' : 'really quick',
+            'sc' : 'screenshot',
+            'bomboclat' : 'dummy',
+            'ss' : 'screenshot',
+            'cya' : 'see you',
+            'c u' : 'see you',
+            'cu' : 'see you',
+            'tmr' : 'tomorrow',
+            'tmrw' : 'tomorrow',
+            'cap' : 'something thats not true',
+            'rizz' : 'charisma',
+            'gyatt' : 'big butt',
+            'gyat' : 'big butt',
+            'nvm' : 'nevermind',
+            'wdym' : 'what do you mean',
+            'ily' : 'I love you',
+            'ilyt' : 'I love you too',
+            'yt' : 'youtube',
+            'idk' : 'I do not know',
+            'idc' : 'I do not care',
+            'cuz' : 'cause',
+            'yk' : 'you know',
+            'iykyk' : 'if you know you know',
+            'idfk' : 'I do not flipping know',
+            'idfc' : 'I do not flipping care',
+            'fr' : 'for real',
+            'ofc' : 'of course',
+            'luv' : 'love',
+            'ly' : 'love you',
+            'gtg' : 'gotta go',
+            'bbg' : 'baby girl',
+            'gng' : 'gang',
+            'bffr' : 'be flipping for real',
+            'idgaf' : 'I do not give a flip',
+            'yw' : 'your welcome',
+            'wyd' : 'what you doing',
+            'wyll' : 'what you look like',
+            'w' : 'win',
+            'l' : 'lose',
+            'fml' : 'flip my life',
+            'oml' : 'oh my lord',
+            'ffs' : 'for flips sake',
+            'itw' : 'in the world',
+            'omw' : 'on my way',
+            'npc' : 'non-playable character',
+            'wb' : 'what about',
+            'smh' : 'shaking my head',
+            'wth' : 'what the heck/hell',
+            'hag1' : 'have a good one',
+            'js' : 'just',
+            'hb' : 'how about',
+            'omfg' : 'oh my flipping god',
+            'lyk' : 'let you know',
+            'gaf' : 'give a flip',
+        };
+
+        function translateText() {
+            var leftText = document.getElementById('leftTextbox').value.toLowerCase();
+            var rightText = translations[leftText] || leftText; // Default to the original text if no translation is found
+
+            document.getElementById('leftTextbox').value = leftText;
+            document.getElementById('rightTextbox').value = rightText;
+        }
+
+        function handleEnter(event) {
+            if (event.key === 'Enter') {
+                translateText();
+            }
+        }
+    </script>
+</body>
+</html>
+
+
